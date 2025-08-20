@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ tay lệnh Linux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1b26;
+            color: #a9b1d6;
+        }
+        .command-card {
+            background-color: #24283b;
+            border: 1px solid #414868;
+        }
+        .command-card h2 {
+            color: #7aa2f7;
+            border-bottom: 1px solid #414868;
+        }
+        .command-card h3 {
+            color: #bb9af7;
+        }
+        code {
+            background-color: #2d3047;
+            color: #ff9e64;
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            border-radius: 6px;
+        }
+        pre {
+            background-color: #1e1e2e;
+            color: #c0caf5;
+            padding: 1em;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #414868;
+        }
+        pre code {
+            padding: 0;
+            background: none;
+        }
+        .sidebar {
+            background-color: #1e1e2e;
+            border-right: 1px solid #414868;
+        }
+        .sidebar a {
+            color: #a9b1d6;
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #414868;
+            color: #c0caf5;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #24283b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #414868;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #565f89;
+        }
+    </style>
+</head>
+<body class="flex">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar w-64 h-screen overflow-y-auto fixed top-0 left-0 p-4 text-sm hidden md:block">
+        <h1 class="text-xl font-bold text-center mb-4 text-[#e0af68]">Sổ tay lệnh Linux</h1>
+        <nav id="toc" class="space-y-1">
+            <!-- Table of Contents will be generated here by JavaScript -->
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="md:ml-64 p-4 md:p-8 w-full">
+        <button id="menu-toggle" class="md:hidden fixed top-4 left-4 z-20 p-2 rounded-md bg-gray-800 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <div class="max-w-4xl mx-auto">
+            <header class="text-center mb-12">
+                <h1 class="text-5xl font-extrabold text-[#e0af68]">Sổ tay lệnh Linux</h1>
+                <p class="text-lg mt-2 text-gray-400">Bởi Flavio Copes</p>
+            </header>
+
+            <div id="command-content" class="space-y-8">
+                <!-- Command sections will be generated here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const commands = [
+            { id: 'introduction', title: 'Giới thiệu', content: `
+                <p>Linux là một hệ điều hành, giống như macOS hay Windows. Nó cũng là hệ điều hành mã nguồn mở và miễn phí phổ biến nhất. Nó cung cấp năng lượng cho đại đa số các máy chủ tạo nên Internet. Android cũng dựa trên một phiên bản sửa đổi của Linux.</p>
+                <p>Một shell là một trình thông dịch lệnh cho phép người dùng tương tác với hệ điều hành cơ bản. Nó cho phép bạn thực hiện các hoạt động bằng văn bản và lệnh, cung cấp các tính năng nâng cao như tạo kịch bản. Các shell phổ biến bao gồm Bash, Zsh và Fish.</p>
+            `},
+            {
+    "id": "man",
+    "title": "man",
+    "content": "<p>Lệnh <code>man</code> (viết tắt của manual) dùng để hiển thị trang hướng dẫn (manual page) cho một lệnh khác. Đây là một công cụ thiết yếu giúp bạn hiểu cách sử dụng các lệnh trong Linux.</p><p><b>Cách sử dụng:</b></p><pre><code>man &lt;lệnh&gt;</code></pre><p>Ví dụ, để xem hướng dẫn của lệnh <code>ls</code>, bạn gõ <code>man ls</code>. Trang hướng dẫn thường chứa rất nhiều thông tin, đôi khi quá chi tiết. Bạn có thể thoát khỏi trang hướng dẫn bằng cách nhấn phím <code>q</code>.</p><p>Ngoài ra, có một công cụ hữu ích khác là <code>tldr</code> (có thể cài đặt và chạy bằng <code>tldr &lt;lệnh&gt;</code>) cung cấp tổng quan nhanh gọn và các ví dụ sử dụng phổ biến, giúp bạn nắm bắt nhanh mà không bị lạc trong lượng thông tin khổng lồ của trang <code>man</code>.</p>"
+  },
+  {
+    "id": "ls",
+    "title": "ls",
+    "content": "<p>Lệnh <code>ls</code> được sử dụng để liệt kê tất cả các tệp và thư mục con có trong một thư mục.</p><p><b>Cách sử dụng cơ bản:</b></p><pre><code>ls</code></pre><p>Lệnh này sẽ hiển thị nội dung của thư mục hiện tại.</p><p>Bạn cũng có thể chỉ định một thư mục cụ thể để liệt kê nội dung của nó:</p><pre><code>ls /bin</code></pre><p><b>Các tùy chọn hữu ích:</b></p><ul><li><code>-al</code>: Một sự kết hợp phổ biến của hai tùy chọn. Khi sử dụng <code>ls -al /bin</code>, lệnh sẽ trả về nhiều thông tin chi tiết hơn so với <code>ls</code> thông thường.</li><ul><li><code>-l</code>: Hiển thị thông tin chi tiết về từng tệp hoặc thư mục, bao gồm quyền truy cập, số lượng liên kết, chủ sở hữu, nhóm, kích thước (tính bằng byte) và thời gian chỉnh sửa.</li><li><code>-a</code>: Hiển thị cả các tệp ẩn (các tệp bắt đầu bằng dấu chấm <code>.</code>).</li></ul></ul>"
+  },
+  {
+    "id": "cd",
+    "title": "cd",
+    "content": "<p>Lệnh <code>cd</code> (viết tắt của change directory) được sử dụng để di chuyển vào một thư mục khác.</p><p><b>Cách sử dụng:</b></p><ul><li>Di chuyển vào một thư mục con:</li><pre><code>cd fruits</code></pre><li>Di chuyển về thư mục cha:</li><pre><code>cd ..</code></pre><li>Di chuyển giữa các thư mục bằng đường dẫn tương đối hoặc tuyệt đối:</li><pre><code>mkdir fruits\nmkdir cars\ncd fruits\ncd ../cars</code></pre><pre><code>cd /etc</code></pre><li>Dấu chấm <code>.</code> đại diện cho thư mục hiện tại.</li></ul><p>Lệnh này hoạt động trên Linux, macOS, WSL và bất kỳ môi trường UNIX nào.</p>"
+  },
+  {
+    "id": "pwd",
+    "title": "pwd",
+    "content": "<p>Lệnh <code>pwd</code> (viết tắt của print working directory) dùng để in ra đường dẫn của thư mục hiện hành mà bạn đang ở trong hệ thống tệp tin.</p><p><b>Cách sử dụng:</b></p><pre><code>pwd</code></pre><p>Lệnh này rất hữu ích khi bạn cảm thấy bị lạc trong hệ thống tệp tin và cần biết vị trí hiện tại của mình.</p>"
+  },
+  {
+    "id": "mkdir",
+    "title": "mkdir",
+    "content": "<p>Lệnh <code>mkdir</code> được sử dụng để tạo thư mục mới.</p><p><b>Cách sử dụng:</b></p><ul><li>Tạo một thư mục đơn lẻ:</li><pre><code>mkdir fruits</code></pre><li>Tạo nhiều thư mục cùng lúc:</li><pre><code>mkdir dogs cars</code></pre><li>Tạo các thư mục lồng nhau (nested folders) bằng tùy chọn <code>-p</code>:</li><pre><code>mkdir -p fruits/apples</code></pre></ul><p>Tùy chọn <code>-p</code> cho phép bạn tạo tất cả các thư mục cha nếu chúng chưa tồn tại. Bạn có thể tìm hiểu thêm các tùy chọn khác của lệnh này bằng cách gõ <code>man mkdir</code>.</p>"
+  },
+  {
+    "id": "rmdir",
+    "title": "rmdir",
+    "content": "<p>Lệnh <code>rmdir</code> được sử dụng để xóa một thư mục. <b>Quan trọng là thư mục bạn muốn xóa phải trống</b>.</p><p><b>Cách sử dụng:</b></p><ul><li>Xóa một thư mục trống:</li><pre><code>mkdir fruits\nrmdir fruits</code></pre><li>Xóa nhiều thư mục trống cùng lúc:</li><pre><code>mkdir fruits cars\nrmdir fruits cars</code></pre></ul><p>Để xóa các thư mục có chứa tệp hoặc thư mục con, bạn cần sử dụng lệnh <code>rm</code> với các tùy chọn <code>-rf</code> (ví dụ: <code>rm -rf fruits cars</code>). Hãy cẩn thận khi sử dụng <code>rm -rf</code> vì lệnh này không yêu cầu xác nhận và các tệp đã xóa khó có thể khôi phục.</p>"
+  },
+  {
+    "id": "mv",
+    "title": "mv",
+    "content": "<p>Lệnh <code>mv</code> được sử dụng để di chuyển hoặc đổi tên tệp và thư mục.</p><p><b>Cách sử dụng:</b></p><ul><li>Đổi tên tệp hoặc thư mục:</li><pre><code>touch pear\nmv pear new_pear</code></pre><p>Tệp <code>pear</code> bây giờ đã được đổi tên thành <code>new_pear</code>.</p><li>Di chuyển tệp vào một thư mục khác:</li><pre><code>touch pear\ntouch apple\nmkdir fruits\nmv pear apple fruits</code></pre><p>Trong ví dụ này, các tệp <code>pear</code> và <code>apple</code> sẽ được di chuyển vào thư mục <code>fruits</code>.</p></ul>"
+  },
+  {
+    "id": "cp",
+    "title": "cp",
+    "content": "<p>Lệnh <code>cp</code> được sử dụng để sao chép tệp hoặc thư mục.</p><p><b>Cách sử dụng:</b></p><ul><li>Sao chép một tệp:</li><pre><code>touch test\ncp apple another_apple</code></pre><li>Sao chép một thư mục (cần thêm tùy chọn <code>-r</code> để sao chép đệ quy toàn bộ nội dung):</li><pre><code>mkdir fruits\ncp -r fruits cars</code></pre></ul>"
+  },
+  {
+    "id": "open",
+    "title": "open",
+    "content": "<p>Lệnh <code>open</code> cho phép bạn mở một tệp hoặc thư mục, và thậm chí chạy một ứng dụng.</p><p><b>Cách sử dụng:</b></p><ul><li>Mở một tệp:</li><pre><code>open &lt;tên_tệp&gt;</code></pre><li>Mở một thư mục (trên macOS, sẽ mở ứng dụng Finder tại thư mục đó):</li><pre><code>open &lt;tên_thư_mục&gt;</code></pre><li>Mở thư mục hiện tại (rất phổ biến):</li><pre><code>open .</code></pre><li>Chạy một ứng dụng:</li><pre><code>open &lt;tên_ứng_dụng&gt;</code></pre></ul><p>Lưu ý: Ký hiệu <code>.</code> đại diện cho thư mục hiện tại, trong khi <code>..</code> đại diện cho thư mục cha.</p>"
+  },
+  {
+    "id": "touch",
+    "title": "touch",
+    "content": "<p>Lệnh <code>touch</code> được sử dụng để tạo một tệp trống.</p><p><b>Cách sử dụng:</b></p><pre><code>touch apple</code></pre><p>Nếu tệp đã tồn tại, lệnh này sẽ cập nhật dấu thời gian (timestamp) của tệp (thời gian sửa đổi gần nhất).</p>"
+  },
+  {
+    "id": "find",
+    "title": "find",
+    "content": "<p>Lệnh <code>find</code> được sử dụng để tìm kiếm tệp hoặc thư mục khớp với một mẫu tìm kiếm cụ thể, thực hiện tìm kiếm đệ quy trong các thư mục con.</p><p><b>Ví dụ và các tùy chọn:</b></p><ul><li>Tìm tất cả các tệp có đuôi <code>.js</code> trong cây thư mục hiện tại (cần dùng dấu ngoặc kép cho các ký tự đặc biệt như <code>*</code>):</li><pre><code>find . -name '*.js'</code></pre><li>Tìm thư mục có tên 'src':</li><pre><code>find . -type d -name src</code></pre><li>Sử dụng <code>-type f</code> để chỉ tìm kiếm tệp, <code>-type l</code> để chỉ tìm liên kết tượng trưng.</li><li><code>-name</code> là tìm kiếm phân biệt chữ hoa/thường. Dùng <code>-iname</code> để tìm kiếm không phân biệt chữ hoa/thường.</li><li>Tìm trong nhiều cây gốc:</li><pre><code>find folder1 folder2 -name filename.txt</code></pre><li>Tìm thư mục có tên 'node_modules' HOẶC 'public':</li><pre><code>find . -type d -name node_modules -or -name public</code></pre><li>Loại trừ một đường dẫn:</li><pre><code>find . -type d -name '*.md' -not -path 'node_modules'</code></pre><li>Tìm các tệp có kích thước lớn hơn 100 byte (ký tự):</li><pre><code>find . -type f -size +100c</code></pre><li>Tìm các tệp lớn hơn 100KB nhưng nhỏ hơn 1MB:</li><pre><code>find . -type f -size +100k -size -1M</code></pre><li>Tìm các tệp được chỉnh sửa hơn 3 ngày trước:</li><pre><code>find . -type f -mtime +3</code></pre><li>Tìm các tệp được chỉnh sửa trong 24 giờ qua:</li><pre><code>find . -type f -mtime -1</code></pre><li>Xóa tất cả các tệp khớp với tìm kiếm (ví dụ: xóa các tệp được chỉnh sửa trong 24 giờ qua):</li><pre><code>find . -type f -mtime -1 -delete</code></pre><li>Thực thi một lệnh trên mỗi kết quả tìm kiếm (ví dụ: in nội dung tệp bằng <code>cat</code>):</li><pre><code>find . -type f -exec cat {} \\;</code></pre><p>Lưu ý: <code>{}</code> sẽ được thay thế bằng tên tệp tại thời điểm thực thi, và cần kết thúc bằng <code>\\;</code>.</p>"
+  },
+  {
+    "id": "ln",
+    "title": "ln",
+    "content": "<p>Lệnh <code>ln</code> được sử dụng để tạo các liên kết (links) trong hệ thống tệp Linux, tương tự như các phím tắt (shortcuts) trong Windows. Có hai loại liên kết chính:</p><h3>Liên kết cứng (Hard links)</h3><ul><li>Ít được sử dụng do có một số hạn chế: không thể liên kết tới thư mục và không thể liên kết tới các hệ thống tệp bên ngoài (đĩa khác).</li><li>Một liên kết cứng không thể phân biệt được với tệp gốc.</li><li>Khi bạn chỉnh sửa một trong các tệp (gốc hoặc liên kết cứng), nội dung sẽ được cập nhật cho cả hai.</li><li>Nếu bạn xóa tệp gốc, liên kết cứng vẫn chứa nội dung tệp gốc, vì nội dung đó sẽ không bị xóa cho đến khi không còn liên kết cứng nào trỏ đến nó.</li><li><b>Cách tạo:</b></li><pre><code>ln &lt;tệp_gốc&gt; &lt;liên_kết&gt;</code></pre><li>Ví dụ:</li><pre><code>ln recipes.txt newrecipes.txt</code></pre></ul><h3>Liên kết mềm (Soft links / Symbolic links)</h3><ul><li>Mạnh mẽ hơn liên kết cứng vì bạn có thể liên kết tới các hệ thống tệp khác và tới các thư mục.</li><li>Tuy nhiên, khi tệp gốc bị xóa, liên kết mềm sẽ bị hỏng.</li><li>Khi liệt kê tệp bằng <code>ls -al</code>, liên kết mềm được hiển thị với cờ <code>l</code> đặc biệt và tên tệp có ký tự <code>@</code> ở cuối (nếu bật màu).</li><li><b>Cách tạo:</b></li><pre><code>ln -s &lt;tệp_gốc&gt; &lt;liên_kết&gt;</code></pre><li>Ví dụ:</li><pre><code>ln -s recipes.txt newrecipes.txt</code></pre></ul>"
+  },
+  {
+    "id": "gzip",
+    "title": "gzip",
+    "content": "<p>Lệnh <code>gzip</code> được sử dụng để nén một tệp bằng giao thức nén LZ77.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li><b>Nén tệp (mặc định xóa tệp gốc):</b></li><pre><code>gzip filename</code></pre><p>Lệnh này sẽ nén <code>filename</code>, thêm đuôi <code>.gz</code> vào tên tệp và xóa tệp gốc.</p><li><b>Nén tệp và giữ tệp gốc:</b></li><pre><code>gzip -c filename &gt; filename.gz</code></pre><p>Tùy chọn <code>-c</code> chỉ định rằng đầu ra sẽ chuyển đến luồng đầu ra chuẩn, giữ nguyên tệp gốc.</p><pre><code>gzip -k filename</code></pre><p>Tùy chọn <code>-k</code> cũng giúp giữ lại tệp gốc sau khi nén.</p><li><b>Chọn mức độ nén:</b></li><p>Các mức nén từ 1 (nhanh nhất, nén kém nhất) đến 9 (chậm nhất, nén tốt nhất), mặc định là 6.</p><pre><code>gzip -1 filename</code></pre><li><b>Nén nhiều tệp:</b></li><pre><code>gzip filename1 filename2</code></pre><li><b>Nén đệ quy tất cả các tệp trong một thư mục:</b></li><pre><code>gzip -r a_folder</code></pre><li><b>Hiển thị thông tin phần trăm nén:</b></li><pre><code>gzip -v -k filename</code></pre><li><b>Giải nén tệp:</b></li><p>Sử dụng tùy chọn <code>-d</code> hoặc dùng lệnh <code>gunzip</code>.</p><pre><code>gzip -d filename.gz</code></pre></ul>"
+  },
+  {
+    "id": "gunzip",
+    "title": "gunzip",
+    "content": "<p>Lệnh <code>gunzip</code> được sử dụng để giải nén các tệp đã được nén bằng <code>gzip</code>. Về cơ bản, nó tương đương với việc sử dụng lệnh <code>gzip</code> với tùy chọn <code>-d</code> đã được bật mặc định.</p><p><b>Cách sử dụng:</b></p><ul><li>Giải nén một tệp:</li><pre><code>gunzip filename.gz</code></pre><p>Lệnh này sẽ giải nén tệp <code>filename.gz</code>, loại bỏ đuôi <code>.gz</code> và lưu kết quả vào tệp <code>filename</code>. Nếu tệp <code>filename</code> đã tồn tại, nó sẽ bị ghi đè.</p><li>Giải nén vào một tệp có tên khác bằng cách chuyển hướng đầu ra:</li><pre><code>gunzip -c filename.gz &gt; anotherfilename</code></pre></ul>"
+  },
+  {
+    "id": "tar",
+    "title": "tar",
+    "content": "<p>Lệnh <code>tar</code> được sử dụng để tạo một kho lưu trữ, nhóm nhiều tệp vào một tệp duy nhất. Tên của nó xuất phát từ \"tape archive\" (kho lưu trữ băng), từ thời các kho lưu trữ được lưu trữ trên băng từ.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li><b>Tạo một kho lưu trữ (archive):</b></li><pre><code>tar -cf archive.tar file1 file2</code></pre><p>Trong đó: <code>c</code> là \"create\" (tạo), <code>f</code> là \"file\" (ghi vào tệp).</p><li><b>Giải nén các tệp từ một kho lưu trữ vào thư mục hiện tại:</b></li><pre><code>tar -xf archive.tar</code></pre><p>Trong đó: <code>x</code> là \"extract\" (giải nén).</p><li><b>Giải nén các tệp vào một thư mục cụ thể:</b></li><pre><code>tar -xf archive.tar -C directory</code></pre><li><b>Liệt kê các tệp có trong một kho lưu trữ:</b></li><pre><code>tar -tf archive.tar</code></pre><li><b>Tạo một kho lưu trữ nén bằng gzip:</b></li><p>Lệnh <code>tar</code> thường được sử dụng để tạo một kho lưu trữ đã nén, sử dụng gzip. Điều này được thực hiện bằng tùy chọn <code>z</code>.</p><pre><code>tar -czf archive.tar.gz file1 file2</code></pre><p>Thao tác này tương đương với việc tạo một kho lưu trữ <code>tar</code> rồi chạy <code>gzip</code> trên đó.</p><li><b>Giải nén một kho lưu trữ nén gzip:</b></li><p>Bạn có thể sử dụng <code>gunzip</code> hoặc <code>gzip -d</code> rồi giải nén, nhưng <code>tar -xf</code> sẽ tự động nhận diện đó là kho lưu trữ nén gzip và thực hiện giải nén cho bạn.</p><pre><code>tar -xf archive.tar.gz</code></pre></ul>"
+  },
+  {
+    "id": "alias",
+    "title": "alias",
+    "content": "<p>Lệnh <code>alias</code> được sử dụng để tạo một lệnh mới, thường là một tên ngắn gọn hoặc dễ nhớ, thay thế cho một lệnh dài hơn hoặc một chuỗi các lệnh kèm theo tùy chọn.</p><p><b>Cách sử dụng:</b></p><ul><li>Tạo một alias: Ví dụ, tạo lệnh <code>ll</code> để thay thế <code>ls -al</code>:</li><pre><code>alias ll='ls -al'</code></pre><p>Sau khi định nghĩa, bạn có thể gọi <code>ll</code> như một lệnh UNIX thông thường.</p><li>Liệt kê các alias đã định nghĩa:</li><pre><code>alias</code></pre></ul><p><b>Tính bền vững:</b></p><ul><li>Alias chỉ có hiệu lực cho đến khi phiên terminal hiện tại đóng lại.</li><li>Để alias trở thành vĩnh viễn, bạn cần thêm nó vào tệp cấu hình shell của mình, ví dụ như <code>~/.bashrc</code>, <code>~/.profile</code> hoặc <code>~/.bash_profile</code> nếu bạn sử dụng Bash, hoặc <code>.zshenv</code> với Zsh.</li></ul><p><b>Lưu ý về dấu ngoặc kép:</b></p><ul><li>Sử dụng dấu ngoặc kép kép (<code>\"</code>) sẽ giải quyết biến tại thời điểm định nghĩa alias:</li><pre><code>alias lsthis=\"ls $PWD\"</code></pre><li>Sử dụng dấu ngoặc đơn (<code>'</code>) sẽ giải quyết biến tại thời điểm gọi alias:</li><pre><code>alias lscurrent='ls $PWD'</code></pre><p>Ví dụ, <code>$PWD</code> là thư mục hiện tại. Nếu bạn di chuyển đến một thư mục mới, <code>lscurrent</code> sẽ liệt kê các tệp trong thư mục mới, còn <code>lsthis</code> vẫn liệt kê các tệp trong thư mục mà bạn đã định nghĩa alias.</p></ul>"
+  },
+  {
+    "id": "cat",
+    "title": "cat",
+    "content": "<p>Lệnh <code>cat</code> được sử dụng chủ yếu để in nội dung của một tệp ra đầu ra chuẩn (standard output). Ngoài ra, nó cũng rất mạnh mẽ trong việc nối và thêm nội dung vào tệp.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>In nội dung của một tệp:</li><pre><code>cat file</code></pre><li>In nội dung của nhiều tệp:</li><pre><code>cat file1 file2</code></pre><li>Nối nội dung của nhiều tệp vào một tệp mới (ghi đè nếu tệp đã tồn tại):</li><pre><code>cat file1 file2 &gt; file3</code></pre><li>Thêm nội dung của nhiều tệp vào cuối một tệp mới (tạo tệp nếu chưa tồn tại):</li><pre><code>cat file1 file2 &gt;&gt; file3</code></pre><li>Hiển thị số dòng trong tệp:</li><pre><code>cat -n file1</code></pre><p>Bạn có thể chỉ đánh số các dòng không trống bằng tùy chọn <code>-b</code>, hoặc loại bỏ các dòng trống liên tiếp bằng tùy chọn <code>-s</code>.</p><li>Thường được sử dụng kết hợp với toán tử ống (pipe <code>|</code>) để chuyển nội dung tệp làm đầu vào cho lệnh khác:</li><pre><code>cat file1 | anothercommand</code></pre></ul>"
+  },
+  {
+    "id": "less",
+    "title": "less",
+    "content": "<p>Lệnh <code>less</code> hiển thị nội dung của một tệp trong một giao diện người dùng tương tác. Đây là một công cụ rất hữu ích để xem các tệp lớn.</p><p><b>Cách sử dụng:</b></p><pre><code>less &lt;tên_tệp&gt;</code></pre><p><b>Các thao tác trong phiên <code>less</code>:</b></p><ul><li>Thoát: Nhấn phím <code>q</code>.</li><li>Di chuyển: Sử dụng các phím <code>up</code> và <code>down</code> để di chuyển từng dòng, <code>space bar</code> để di chuyển từng trang tiến lên, và <code>b</code> để lùi lại từng trang.</li><li>Đi đến đầu/cuối tệp: Nhấn <code>G</code> để nhảy đến cuối tệp, <code>g</code> để quay lại đầu tệp.</li><li>Tìm kiếm: Nhấn <code>/</code> và gõ từ cần tìm để tìm kiếm tiến (forward). Nhấn <code>?</code> và gõ từ cần tìm để tìm kiếm lùi (backward).</li><li>Mở trình soạn thảo: Nhấn <code>v</code> để mở trình soạn thảo hệ thống (thường là <code>vim</code>).</li><li>Chế độ theo dõi (Follow mode): Nhấn <code>F</code> để vào chế độ theo dõi. Khi tệp được thay đổi bởi một chương trình khác, bạn sẽ thấy các thay đổi trực tiếp. Thoát chế độ này bằng <code>Ctrl-C</code>. Chế độ này tương tự như lệnh <code>tail -f</code>.</li><li>Mở nhiều tệp: Bạn có thể mở nhiều tệp và điều hướng giữa chúng bằng <code>:n</code> (tệp tiếp theo) và <code>:p</code> (tệp trước đó).</li></ul>"
+  },
+  {
+    "id": "tail",
+    "title": "tail",
+    "content": "<p>Lệnh <code>tail</code> được sử dụng để hiển thị phần cuối của một tệp. Trường hợp sử dụng tốt nhất của <code>tail</code> là khi được gọi với tùy chọn <code>-f</code> để theo dõi các thay đổi của tệp.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li><b>Theo dõi các tệp nhật ký (log files) theo thời gian thực:</b></li><pre><code>tail -f /var/log/system.log</code></pre><p>Lệnh này sẽ mở tệp ở cuối và theo dõi các thay đổi của tệp. Bất cứ khi nào có nội dung mới trong tệp, nó sẽ được in ra cửa sổ terminal. Để thoát, nhấn <code>Ctrl-C</code>.</p><li>In ra 10 dòng cuối cùng của một tệp:</li><pre><code>tail -n 10 &lt;tên_tệp&gt;</code></pre><li>In toàn bộ nội dung tệp bắt đầu từ một dòng cụ thể (ví dụ từ dòng 10):</li><pre><code>tail -n +10 &lt;tên_tệp&gt;</code></pre></ul><p>Bạn có thể tìm hiểu thêm về lệnh <code>tail</code> bằng cách xem trang hướng dẫn <code>man tail</code>.</p>"
+  },
+  {
+    "id": "wc",
+    "title": "wc",
+    "content": "<p>Lệnh <code>wc</code> (word count) cung cấp thông tin hữu ích về một tệp hoặc đầu vào mà nó nhận được qua các ống (pipes).</p><p><b>Cách sử dụng:</b></p><ul><li>Đối với một tệp, nó hiển thị số dòng, số từ và số byte:</li><pre><code>echo test &gt;&gt; test.txt\nwc test.txt</code></pre><li>Kết hợp với pipe, nó có thể đếm đầu ra của các lệnh khác:</li><pre><code>ls -al | wc</code></pre><p>Cột đầu tiên là số dòng. Cột thứ hai là số từ. Cột thứ ba là số byte.</p><li><b>Các tùy chọn:</b></li><ul><li><code>-l</code>: Chỉ đếm số dòng:</li><pre><code>wc -l test.txt</code></pre><li><code>-w</code>: Chỉ đếm số từ:</li><pre><code>wc -w test.txt</code></pre><li><code>-c</code>: Chỉ đếm số byte:</li><pre><code>wc -c test.txt</code></pre><li><code>-m</code>: Đếm số ký tự (hữu ích cho các bộ ký tự không phải ASCII, ví dụ Unicode, nơi một ký tự có thể chiếm nhiều byte):</li><pre><code>wc -m test.txt</code></pre></ul>"
+  },
+  {
+    "id": "grep",
+    "title": "grep",
+    "content": "<p>Lệnh <code>grep</code> là một công cụ cực kỳ hữu ích, giúp bạn tìm kiếm trong các tệp hoặc lọc đầu ra của các lệnh khác, thường sử dụng biểu thức chính quy (regular expression). Tên <code>grep</code> là viết tắt của \"global regular expression print\".</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Tìm kiếm các chuỗi trong tệp:</li><pre><code>grep document.getElementById index.md</code></pre><li>Hiển thị số dòng chứa kết quả:</li><pre><code>grep -n document.getElementById index.md</code></pre><li>Hiển thị ngữ cảnh (context) xung quanh dòng khớp (ví dụ: 2 dòng trước và 2 dòng sau):</li><pre><code>grep -nC 2 document.getElementById index.md</code></pre><li>Tìm kiếm không phân biệt chữ hoa/thường: Sử dụng tùy chọn <code>-i</code>.</li><li>Lọc đầu ra của một lệnh khác:</li><pre><code>less index.md | grep -n document.getElementById</code></pre><li>Đảo ngược kết quả (loại trừ các dòng khớp với chuỗi): Sử dụng tùy chọn <code>-v</code>.</li></ul><p>Chuỗi tìm kiếm có thể là một biểu thức chính quy, điều này làm cho <code>grep</code> rất mạnh mẽ.</p>"
+  },
+  {
+    "id": "sort",
+    "title": "sort",
+    "content": "<p>Lệnh <code>sort</code> giúp sắp xếp các dòng văn bản. Bạn có thể áp dụng nó cho nội dung từ một tệp hoặc từ đầu ra của một lệnh khác thông qua pipe.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Sắp xếp nội dung tệp theo thứ tự mặc định (phân biệt chữ hoa/thường, theo bảng chữ cái):</li><pre><code>sort dogs.txt</code></pre><li>Đảo ngược thứ tự sắp xếp:</li><pre><code>sort -r dogs.txt</code></pre><li>Sắp xếp không phân biệt chữ hoa/thường: Sử dụng tùy chọn <code>--ignore-case</code>.</li><li>Sắp xếp theo thứ tự số: Sử dụng tùy chọn <code>-n</code>.</li><li>Loại bỏ các dòng trùng lặp:</li><pre><code>sort -u dogs.txt</code></pre><p>Lưu ý: Lệnh <code>sort</code> có tùy chọn <code>-u</code> (unique) riêng để loại bỏ các bản sao, nhưng lệnh <code>uniq</code> (thường dùng cùng <code>sort</code>) có nhiều khả năng hơn.</p><li>Sắp xếp đầu ra của các lệnh khác (ví dụ: sắp xếp danh sách tệp trả về bởi <code>ls</code>):</li><pre><code>ls | sort</code></pre></ul><p><code>sort</code> rất mạnh mẽ và có nhiều tùy chọn khác mà bạn có thể khám phá bằng cách gọi <code>man sort</code>.</p>"
+  },
+  {
+    "id": "uniq",
+    "title": "uniq",
+    "content": "<p>Lệnh <code>uniq</code> hữu ích để xử lý các dòng văn bản, đặc biệt là để phát hiện các dòng trùng lặp liền kề.</p><p><b>Cách sử dụng:</b></p><ul><li>Bạn có thể cung cấp đầu vào từ một tệp hoặc từ đầu ra của một lệnh khác thông qua pipe:</li><pre><code>uniq dogs.txt</code></pre><pre><code>ls | uniq</code></pre></ul><p><b>Lưu ý quan trọng:</b> Lệnh <code>uniq</code> chỉ phát hiện các dòng trùng lặp <b>liền kề</b>. Do đó, bạn thường sẽ sử dụng nó cùng với <code>sort</code> để đảm bảo tất cả các dòng trùng lặp đều nằm cạnh nhau trước khi <code>uniq</code> xử lý:</p><pre><code>sort dogs.txt | uniq</code></pre><p>Lệnh <code>sort</code> có tùy chọn <code>-u</code> (unique) riêng để loại bỏ các bản sao, nhưng <code>uniq</code> có nhiều khả năng hơn.</p><p><b>Các tùy chọn hữu ích khác của <code>uniq</code>:</b></p><ul><li><code>-d</code>: Chỉ hiển thị các dòng bị trùng lặp:</li><pre><code>sort dogs.txt | uniq -d</code></pre><li><code>-u</code>: Chỉ hiển thị các dòng không bị trùng lặp:</li><pre><code>sort dogs.txt | uniq -u</code></pre><li><code>-c</code>: Đếm số lần xuất hiện của mỗi dòng:</li><pre><code>sort dogs.txt | uniq -c</code></pre><li>Kết hợp để sắp xếp các dòng theo tần suất xuất hiện (từ nhiều nhất đến ít nhất):</li><pre><code>sort dogs.txt | uniq -c | sort -nr</code></pre></ul>"
+  },
+  {
+    "id": "diff",
+    "title": "diff",
+    "content": "<p>Lệnh <code>diff</code> là một công cụ tiện lợi được sử dụng để so sánh hai tệp và hiển thị sự khác biệt giữa chúng.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>So sánh hai tệp:</li><pre><code>diff dogs.txt moredogs.txt</code></pre><p>Lệnh này sẽ cho bạn biết sự khác biệt. Ví dụ, nếu <code>moredogs.txt</code> có thêm một dòng, <code>diff</code> sẽ chỉ ra điều đó. Nếu đảo ngược thứ tự tệp, nó sẽ chỉ ra dòng bị thiếu.</p><li>So sánh hai tệp cạnh nhau, dòng theo dòng:</li><pre><code>diff -y file1 file2</code></pre><li>Hiển thị định dạng khác biệt quen thuộc (tương tự như Git):</li><pre><code>diff -u file1 file2</code></pre><li>So sánh các thư mục (đệ quy vào các thư mục con):</li><pre><code>diff -r directory1 directory2</code></pre><li>Trong trường hợp bạn chỉ muốn biết những tệp nào khác nhau, chứ không phải nội dung, hãy sử dụng tùy chọn <code>-r</code> và <code>-q</code>:</li><pre><code>diff -rq directory1 directory2</code></pre></ul><p>Bạn có thể khám phá thêm nhiều tùy chọn khác trong trang hướng dẫn bằng cách chạy <code>man diff</code>.</p>"
+  },
+  {
+    "id": "echo",
+    "title": "echo",
+    "content": "<p>Lệnh <code>echo</code> thực hiện một công việc đơn giản: in đối số được truyền cho nó ra đầu ra.</p><p><b>Cách sử dụng:</b></p><ul><li>In một chuỗi văn bản:</li><pre><code>echo \"hello\"</code></pre><li>Thêm đầu ra vào một tệp:</li><pre><code>echo \"hello\" &gt;&gt; output.txt</code></pre><li>Nội suy biến môi trường:</li><pre><code>echo \"The path variable is $PATH\"</code></pre><li>Thoát các ký tự đặc biệt bằng dấu gạch chéo ngược <code>\\</code>, ví dụ <code>$</code>:</li><pre><code>echo \"\$5\"</code></pre><li>In các tệp trong thư mục hiện tại:</li><pre><code>echo *</code></pre><li>In các tệp trong thư mục hiện tại bắt đầu bằng chữ <code>o</code>:</li><pre><code>echo o*</code></pre><li>In đường dẫn thư mục chính (home folder):</li><pre><code>echo ~</code></pre><li>Thực thi lệnh và in kết quả ra đầu ra chuẩn (lưu ý: khoảng trắng không được giữ nguyên mặc định):</li><pre><code>echo $(ls -al)</code></pre><li>Để giữ khoảng trắng, bạn cần bọc lệnh trong dấu ngoặc kép:</li><pre><code>echo \"$(ls -al)\"</code></pre><li>Tạo danh sách chuỗi, ví dụ dãy số:</li><pre><code>echo {1..5}</code></pre></ul>"
+  },
+  {
+    "id": "chown",
+    "title": "chown",
+    "content": "<p>Mỗi tệp/thư mục trong các hệ điều hành như Linux hoặc macOS (và các hệ thống UNIX nói chung) đều có một chủ sở hữu. Chủ sở hữu của một tệp có thể làm mọi thứ với nó. Chủ sở hữu (và người dùng <code>root</code>) có thể thay đổi chủ sở hữu của tệp/thư mục đó cho người dùng khác bằng lệnh <code>chown</code>.</p><p><b>Cách sử dụng:</b></p><ul><li>Thay đổi chủ sở hữu của một tệp:</li><pre><code>chown &lt;tên_chủ_sở_hữu&gt; &lt;tệp&gt;</code></pre><li>Ví dụ:</li><pre><code>chown flavio test.txt</code></pre><li>Thay đổi quyền sở hữu của một thư mục và tất cả các tệp/thư mục con của nó một cách đệ quy: Sử dụng cờ <code>-R</code> (recursive).</li><pre><code>chown -R &lt;tên_chủ_sở_hữu&gt; &lt;thư_mục&gt;</code></pre><li>Thay đổi đồng thời chủ sở hữu và nhóm của một tệp:</li><pre><code>chown &lt;tên_chủ_sở_hữu&gt;:&lt;tên_nhóm&gt; &lt;tệp&gt;</code></pre><li>Ví dụ:</li><pre><code>chown flavio:users test.txt</code></pre></ul><p>Bạn cũng có thể chỉ thay đổi nhóm của một tệp bằng lệnh <code>chgrp</code>.</p><pre><code>chgrp &lt;tên_nhóm&gt; &lt;tên_tệp&gt;</code></pre>"
+  },
+  {
+    "id": "chmod",
+    "title": "chmod",
+    "content": "<p>Mỗi tệp trong các hệ điều hành Linux/macOS (và các hệ thống UNIX nói chung) đều có ba loại quyền: Đọc (Read), Ghi (Write), và Thực thi (Execute). Bạn có thể xem các quyền này bằng lệnh <code>ls -al</code>, nơi các chuỗi như <code>drwxr-xr-x</code> định nghĩa quyền của tệp hoặc thư mục.</p><p><b>Giải thích chuỗi quyền:</b></p><ul><li>Ký tự đầu tiên cho biết loại tệp: <code>-</code> là tệp thông thường, <code>d</code> là thư mục, <code>l</code> là liên kết.</li><li>Tiếp theo là 3 bộ giá trị, mỗi bộ gồm 3 ký tự, đại diện cho quyền của:</li><ul><li>Chủ sở hữu tệp.</li><li>Các thành viên trong nhóm liên kết với tệp.</li><li>Tất cả những người khác (người dùng không phải chủ sở hữu và không thuộc nhóm).</li></ul><li>Mỗi bộ 3 ký tự (ví dụ: <code>rwx</code>) cho biết quyền đọc, ghi và thực thi. Ký tự <code>-</code> có nghĩa là quyền đó bị loại bỏ.</li></ul><p>Bạn có thể thay đổi các quyền này bằng lệnh <code>chmod</code>, có hai cách sử dụng chính:</p><h3>1. Sử dụng đối số ký hiệu (Symbolic arguments)</h3><p>Cách này trực quan hơn:</p><ul><li>Các ký tự đại diện cho đối tượng: <code>a</code> (all - tất cả), <code>u</code> (user - chủ sở hữu), <code>g</code> (group - nhóm), <code>o</code> (others - người khác).</li><li>Sử dụng <code>+</code> để thêm quyền, <code>-</code> để xóa quyền.</li><li>Các ký hiệu quyền: <code>r</code> (đọc), <code>w</code> (ghi), <code>x</code> (thực thi).</li></ul><p><b>Ví dụ:</b></p><pre><code>chmod a+r filename   # Mọi người bây giờ có thể đọc\nchmod a+rw filename  # Mọi người bây giờ có thể đọc và ghi\nchmod o-rwx filename # Người khác (không phải chủ sở hữu, không thuộc nhóm) không có quyền đọc, ghi, thực thi</code></pre><p>Bạn có thể áp dụng cùng một quyền cho nhiều đối tượng bằng cách thêm nhiều ký tự trước <code>+</code>/<code>-</code>, ví dụ: <code>chmod ug-r filename</code> (người dùng và nhóm không thể đọc). Khi chỉnh sửa một thư mục, bạn có thể sử dụng cờ <code>-r</code> (recursive) để áp dụng quyền cho mọi tệp và thư mục con bên trong.</p><h3>2. Sử dụng đối số số (Numeric arguments)</h3><p>Cách này nhanh hơn nhưng khó nhớ hơn nếu bạn không sử dụng hàng ngày.</p><ul><li>Mỗi quyền được gán một giá trị số:</li><ul><li><code>1</code>: Quyền thực thi (execute)</li><li><code>2</code>: Quyền ghi (write)</li><li><code>4</code>: Quyền đọc (read)</li></ul><li>Giá trị tổng cộng (tối đa là 7) cho mỗi đối tượng (chủ sở hữu, nhóm, người khác) là tổng các quyền của họ:</li><ul><li><code>0</code>: Không có quyền</li><li><code>1</code>: Chỉ thực thi</li><li><code>2</code>: Chỉ ghi</li><li><code>3</code>: Ghi, thực thi (1+2)</li><li><code>4</code>: Chỉ đọc</li><li><code>5</code>: Đọc, thực thi (4+1)</li><li><code>6</code>: Đọc, ghi (4+2)</li><li><code>7</code>: Đọc, ghi và thực thi (4+2+1)</li></ul></ul><p>Bạn sử dụng ba chữ số, tương ứng với quyền của chủ sở hữu, nhóm và người khác.</p><p><b>Ví dụ:</b></p><pre><code>chmod 777 filename  # Mọi người có đầy đủ quyền\nchmod 755 filename  # Chủ sở hữu: đọc, ghi, thực thi; Nhóm/Khác: đọc, thực thi\nchmod 644 filename  # Chủ sở hữu: đọc, ghi; Nhóm/Khác: chỉ đọc</code></pre>"
+  },
+  {
+    "id": "umask",
+    "title": "umask",
+    "content": "<p>Lệnh <code>umask</code> được sử dụng để kiểm soát và sửa đổi các quyền mặc định cho các tệp và thư mục mới được tạo.</p><p><b>Cách sử dụng:</b></p><ul><li>Hiển thị giá trị umask hiện tại (thường là giá trị bát phân như <code>0022</code>):</li><pre><code>umask</code></pre><li>Hiển thị giá trị umask ở định dạng dễ đọc (human-readable notation):</li><pre><code>umask -S</code></pre><p>Ví dụ, <code>u=rwx,g=rx,o=rx</code> có nghĩa là: chủ sở hữu (<code>u</code>) có quyền đọc, ghi, thực thi; các thành viên cùng nhóm (<code>g</code>) có quyền đọc và thực thi; tất cả người dùng khác (<code>o</code>) cũng có quyền đọc và thực thi.</p><li>Đặt giá trị mới cho umask ở định dạng số:</li><pre><code>umask 002</code></pre><li>Thay đổi quyền của một vai trò cụ thể:</li><pre><code>umask g+r</code></pre></ul><p><b>Lưu ý về định dạng số của umask:</b> Khác với cách tính trong lệnh <code>chmod</code>, trong <code>umask</code>, mỗi chữ số có ý nghĩa sau:</p><ul><li><code>0</code>: đọc, ghi, thực thi</li><li><code>1</code>: đọc và ghi</li><li><code>2</code>: đọc và thực thi</li><li><code>3</code>: chỉ đọc</li><li><code>4</code>: ghi và thực thi</li><li><code>5</code>: chỉ ghi</li><li><code>6</code>: chỉ thực thi</li><li><code>7</code>: không có quyền</li></ul>"
+  },
+  {
+    "id": "du",
+    "title": "du",
+    "content": "<p>Lệnh <code>du</code> (disk usage) sẽ tính toán kích thước tổng thể của một thư mục hoặc kích thước của từng tệp riêng lẻ.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Tính toán kích thước của thư mục hiện tại:</li><pre><code>du</code></pre><p>Giá trị trả về là kích thước tính bằng byte.</p><li>Tính toán kích thước của từng tệp riêng lẻ trong thư mục hiện tại:</li><pre><code>du *</code></pre><li>Hiển thị giá trị theo MegaBytes (<code>-m</code>) hoặc GigaBytes (<code>-g</code>).</li><li><b><code>-h</code>: Hiển thị kích thước ở định dạng dễ đọc (human-readable), tự động điều chỉnh đơn vị (KB, MB, GB):</b></li><pre><code>du -h</code></pre><li><code>-a</code>: In ra kích thước của từng tệp trong các thư mục con.</li><li>Sắp xếp các thư mục theo kích thước và hiển thị 10 kết quả đầu tiên (hữu ích):</li><pre><code>du -h &lt;thư_mục&gt; | sort -nr | head</code></pre></ul>"
+  },
+  {
+    "id": "df",
+    "title": "df",
+    "content": "<p>Lệnh <code>df</code> (disk free) được sử dụng để lấy thông tin về việc sử dụng đĩa, thường là về các ổ đĩa đã được gắn (mounted volumes).</p><p><b>Cách sử dụng:</b></p><ul><li>Hiển thị thông tin cơ bản về các ổ đĩa đã gắn:</li><pre><code>df</code></pre><li>Hiển thị các giá trị ở định dạng dễ đọc (human-readable format, ví dụ: KB, MB, GB):</li><pre><code>df -h</code></pre><li>Chỉ định một tệp hoặc thư mục để lấy thông tin về ổ đĩa mà nó nằm trên:</li><pre><code>df &lt;tên_tệp_hoặc_thư_mục&gt;</code></pre></ul>"
+  },
+  {
+    "id": "basename",
+    "title": "basename",
+    "content": "<p>Lệnh <code>basename</code> được sử dụng để trả về phần cuối cùng của một đường dẫn đến tệp hoặc thư mục.</p><p><b>Cách sử dụng:</b></p><ul><li>Đối với đường dẫn tệp:</li><pre><code>basename /Users/flavio/test.txt</code></pre><p>Lệnh này sẽ trả về chuỗi <code>test.txt</code>.</p><li>Đối với đường dẫn thư mục:</li><pre><code>basename /Users/flavio</code></pre><p>Lệnh này sẽ trả về chuỗi <code>flavio</code>.</p></ul>"
+  },
+  {
+    "id": "dirname",
+    "title": "dirname",
+    "content": "<p>Lệnh <code>dirname</code> được sử dụng để trả về phần thư mục (đường dẫn cha) của một đường dẫn đến tệp hoặc thư mục.</p><p><b>Cách sử dụng:</b></p><pre><code>dirname /Users/flavio/test.txt</code></pre><p>Lệnh này sẽ trả về chuỗi <code>/Users/flavio</code>.</p>"
+  },
+  {
+    "id": "ps",
+    "title": "ps",
+    "content": "<p>Máy tính của bạn luôn chạy rất nhiều tiến trình khác nhau. Lệnh <code>ps</code> được sử dụng để kiểm tra các tiến trình đang chạy.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Hiển thị các tiến trình do người dùng hiện tại khởi tạo trong phiên hiện tại:</li><pre><code>ps</code></pre><li>Liệt kê tất cả các tiến trình trên hệ thống:</li><pre><code>ps ax</code></pre><p>Trong đó, <code>a</code> được sử dụng để liệt kê các tiến trình của người dùng khác, và <code>x</code> hiển thị các tiến trình không liên kết với bất kỳ terminal nào (không do người dùng khởi tạo qua terminal).</p><li>Hiển thị đầy đủ thông tin lệnh mà không bị cắt ngắn (cần chỉ định <code>w</code> hai lần):</li><pre><code>ps axww</code></pre><li>Tìm kiếm một tiến trình cụ thể bằng cách kết hợp với <code>grep</code>:</li><pre><code>ps axww | grep \"Visual Studio Code\"</code></pre></ul><p><b>Các cột thông tin chính được trả về bởi <code>ps</code>:</b></p><ul><li><b><code>PID</code>:</b> ID tiến trình. Đây là thông tin quan trọng khi bạn muốn tham chiếu tiến trình này trong các lệnh khác, ví dụ để kết thúc nó.</li><li><b><code>TT</code>:</b> ID terminal được sử dụng.</li><li><b><code>STAT</code>:</b> Trạng thái của tiến trình. Một số trạng thái phổ biến:</li><ul><li><code>I</code>: Tiến trình ở chế độ nhàn rỗi (idle).</li><li><code>R</code>: Tiến trình đang chạy được (runnable).</li><li><code>S</code>: Tiến trình đang ngủ (sleeping).</li><li><code>T</code>: Tiến trình đã dừng (stopped).</li><li><code>Z</code>: Tiến trình đã chết (zombie).</li><li><code>+</code>: Tiến trình đang chạy ở chế độ nền (foreground) trong terminal của nó.</li><li><code>s</code>: Tiến trình là người dẫn đầu phiên (session leader).</li></ul><li><b><code>TIME</code>:</b> Thời gian tiến trình đã chạy.</li></ul>"
+  },
+  {
+    "id": "top",
+    "title": "top",
+    "content": "<p>Lệnh <code>top</code> được sử dụng để hiển thị thông tin động, thời gian thực về các tiến trình đang chạy trong hệ thống. Nó rất hữu ích để hiểu những gì đang diễn ra trên máy tính, bao gồm số lượng tiến trình, bao nhiêu tiến trình đang chạy hoặc ngủ, tải hệ thống, mức sử dụng CPU, v.v..</p><p><b>Cách sử dụng:</b></p><pre><code>top</code></pre><p>Lệnh này sẽ mở một giao diện toàn màn hình hiển thị thông tin liên tục được cập nhật. Để thoát, bạn có thể nhấn phím <code>q</code> hoặc <code>Ctrl-C</code>.</p><p>Mặc định, các tiến trình được sắp xếp theo mức sử dụng CPU (cột <code>%CPU</code>). Bạn có thể thêm tùy chọn để sắp xếp các tiến trình theo bộ nhớ được sử dụng:</p><pre><code>top -o mem</code></pre>"
+  },
+  {
+    "id": "kill",
+    "title": "kill",
+    "content": "<p>Các tiến trình Linux có thể nhận tín hiệu và phản ứng với chúng. Lệnh <code>kill</code> có thể gửi nhiều loại tín hiệu đến một chương trình, chủ yếu được sử dụng để kết thúc (terminate) một chương trình.</p><p><b>Cách sử dụng:</b></p><pre><code>kill &lt;PID&gt;</code></pre><p>Mặc định, lệnh này gửi tín hiệu <code>TERM</code> đến ID tiến trình được chỉ định.</p><p><b>Các tín hiệu phổ biến có thể gửi (bằng cờ hoặc số):</b></p><ul><li><b><code>-HUP</code></b> (số <b>1</b>): Tín hiệu \"treo máy\" (hang up). Được gửi tự động khi cửa sổ terminal đã khởi động một tiến trình bị đóng trước khi tiến trình kết thúc.</li><li><b><code>-INT</code></b> (số <b>2</b>): Tín hiệu \"ngắt\" (interrupt). Gửi cùng tín hiệu được sử dụng khi nhấn <code>Ctrl-C</code> trong terminal, thường kết thúc tiến trình.</li><li><b><code>-KILL</code></b> (số <b>9</b>): Không gửi đến tiến trình mà gửi đến kernel hệ điều hành. Kernel ngay lập tức dừng và kết thúc tiến trình. Tiến trình không thể bỏ qua tín hiệu này.</li><li><b><code>-TERM</code></b> (số <b>15</b>): Tín hiệu \"kết thúc\" (terminate). Tiến trình sẽ nhận tín hiệu này và tự kết thúc. Đây là tín hiệu mặc định của lệnh <code>kill</code>.</li><li><b><code>-CONT</code></b> (số <b>18</b>): Tín hiệu \"tiếp tục\" (continue). Có thể được sử dụng để tiếp tục một tiến trình đã dừng.</li><li><b><code>-STOP</code></b> (số <b>15</b>): Tín hiệu \"dừng\" (stop). Không gửi đến tiến trình mà gửi đến kernel hệ điều hành. Kernel ngay lập tức dừng (nhưng không kết thúc) tiến trình.</li></ul>"
+  },
+  {
+    "id": "killall",
+    "title": "killall",
+    "content": "<p>Tương tự như lệnh <code>kill</code>, lệnh <code>killall</code> sẽ gửi một tín hiệu đến nhiều tiến trình cùng lúc, dựa trên tên của chương trình.</p><p><b>Cách sử dụng:</b></p><pre><code>killall &lt;tên&gt;</code></pre><p>Trong đó <code>&lt;tên&gt;</code> là tên của một chương trình. Ví dụ, nếu bạn có nhiều phiên bản của chương trình <code>top</code> đang chạy, <code>killall top</code> sẽ kết thúc tất cả chúng.</p><p>Bạn cũng có thể chỉ định loại tín hiệu cần gửi, giống như với lệnh <code>kill</code> (ví dụ: <code>killall -HUP top</code>).</p>"
+  },
+  {
+    "id": "jobs",
+    "title": "jobs",
+    "content": "<p>Khi chạy một lệnh trong Linux/macOS, bạn có thể đặt nó chạy ở chế độ nền (background) bằng cách thêm ký hiệu <code>&amp;</code> sau lệnh (ví dụ: <code>top &amp;</code>). Lệnh <code>jobs</code> được sử dụng để liệt kê các công việc (jobs) đang chạy ở chế độ nền hoặc đã bị dừng trong phiên hiện tại.</p><p><b>Cách sử dụng:</b></p><ul><li>Liệt kê các công việc:</li><pre><code>jobs</code></pre><li>Ví dụ, nếu bạn chạy <code>top &amp;</code> rồi <code>top -o mem &amp;</code>, lệnh <code>jobs</code> sẽ hiển thị danh sách các phiên bản <code>top</code> đang chạy ở nền.</li><li>Hiển thị ID tiến trình (PID) của mỗi công việc:</li><pre><code>jobs -l</code></pre></ul><p>Bạn có thể đưa một công việc từ chế độ nền lên chế độ nền trước (foreground) bằng lệnh <code>fg</code>. Để dừng một chương trình đang chạy ở chế độ nền trước, bạn có thể nhấn <code>Ctrl-Z</code>.</p>"
+  },
+  {
+    "id": "bg",
+    "title": "bg",
+    "content": "<p>Lệnh <code>bg</code> được sử dụng để tiếp tục thực thi một lệnh đã bị tạm dừng (suspended) ở chế độ nền (background).</p><p><b>Cách sử dụng:</b></p><ul><li>Đầu tiên, bạn có thể tạm dừng một lệnh đang chạy bằng cách nhấn <code>Ctrl-Z</code>. Lệnh sẽ ngay lập tức dừng lại, và bạn sẽ trở về terminal shell.</li><li>Để tiếp tục thực thi lệnh đó ở chế độ nền:</li><pre><code>bg &lt;số_công_việc&gt;</code></pre><p>Ví dụ, nếu bạn có nhiều lệnh bị dừng, bạn có thể chạy <code>bg 1</code> để tiếp tục thực thi công việc số 1 ở chế độ nền. Nếu không chỉ định số công việc, mặc định là công việc số 1 trong danh sách.</p></ul><p>Lệnh sẽ tiếp tục chạy mà không ngăn bạn thực hiện các công việc khác trong terminal.</p>"
+  },
+  {
+    "id": "fg",
+    "title": "fg",
+    "content": "<p>Lệnh <code>fg</code> được sử dụng để đưa một công việc (job) đang chạy ở chế độ nền (background) hoặc đã bị tạm dừng trở lại chế độ nền trước (foreground).</p><p><b>Cách sử dụng:</b></p><ul><li>Đưa công việc cuối cùng bị tạm dừng hoặc chạy nền lên nền trước:</li><pre><code>fg</code></pre><li>Chỉ định công việc bạn muốn đưa lên nền trước bằng cách truyền số công việc (bạn có thể lấy số này bằng lệnh <code>jobs</code>):</li><pre><code>fg 2</code></pre></ul>"
+  },
+  {
+    "id": "type",
+    "title": "type",
+    "content": "<p>Lệnh <code>type</code> giúp xác định cách một lệnh sẽ được thông dịch. Một lệnh có thể là một trong bốn loại sau:</p><ul><li>Một tệp thực thi (executable)</li><li>Một chương trình tích hợp sẵn của shell (shell built-in)</li><li>Một hàm shell (shell function)</li><li>Một alias</li></ul><p><b>Cách sử dụng:</b></p><pre><code>type &lt;lệnh&gt;</code></pre><p>Đầu ra sẽ khác nhau tùy thuộc vào shell bạn đang sử dụng (ví dụ: Bash, Zsh, Fish). Một trong những điều thú vị nhất là đối với các alias, lệnh <code>type</code> sẽ cho bạn biết alias đó trỏ tới lệnh nào.</p>"
+  },
+  {
+    "id": "which",
+    "title": "which",
+    "content": "<p>Lệnh <code>which</code> được sử dụng để biết vị trí của một lệnh thực thi được lưu trữ trên đĩa, miễn là lệnh đó nằm trong đường dẫn shell.</p><p><b>Cách sử dụng:</b></p><pre><code>which &lt;lệnh&gt;</code></pre><p>Lệnh này sẽ trả về đường dẫn đầy đủ đến lệnh được chỉ định.</p><p><b>Lưu ý:</b> <code>which</code> chỉ hoạt động với các tệp thực thi được lưu trữ trên đĩa, không hoạt động với các alias hoặc các hàm tích hợp sẵn của shell.</p>"
+  },
+  {
+    "id": "nohup",
+    "title": "nohup",
+    "content": "<p>Lệnh <code>nohup</code> được sử dụng để một lệnh tiếp tục chạy ngay cả khi bạn đăng xuất hoặc đóng phiên kết nối với máy chủ từ xa. Điều này hữu ích cho các tiến trình chạy dài hoặc để ngăn lệnh bị dừng nếu có sự cố mạng giữa bạn và máy chủ.</p><p><b>Cách sử dụng:</b></p><pre><code>nohup &lt;lệnh&gt;</code></pre><p>Ví dụ: <code>nohup my_long_running_script.sh &amp;</code> (thường kết hợp với <code>&amp;</code> để chạy nền).</p>"
+  },
+  {
+    "id": "xargs",
+    "title": "xargs",
+    "content": "<p>Lệnh <code>xargs</code> trong shell UNIX được sử dụng để chuyển đổi đầu vào từ luồng đầu vào chuẩn (standard input) thành các đối số (arguments) cho một lệnh khác. Nói cách khác, đầu ra của lệnh đầu tiên sẽ được sử dụng làm đầu vào cho lệnh thứ hai.</p><p><b>Cú pháp cơ bản:</b></p><pre><code>lệnh1 | xargs lệnh2</code></pre><p>Chúng ta sử dụng một ống (pipe <code>|</code>) để chuyển đầu ra của <code>lệnh1</code> cho <code>xargs</code>. <code>xargs</code> sau đó sẽ thực thi <code>lệnh2</code>, sử dụng đầu ra từ <code>lệnh1</code> làm đối số.</p><p><b>Ví dụ:</b></p><ul><li>Xóa các tệp được liệt kê trong một tệp văn bản:</li><p>Giả sử bạn có tệp <code>todelete.txt</code> chứa danh sách các tệp cần xóa (ví dụ: <code>file1</code>, <code>file3</code>).</p><pre><code>cat todelete.txt | xargs rm</code></pre><p>Lệnh này sẽ chạy <code>rm</code> hai lần, mỗi lần cho một dòng được trả về bởi <code>cat</code>, dẫn đến việc xóa <code>file1</code> và <code>file3</code>.</p><li><b>Các tùy chọn hữu ích:</b></li><ul><li><code>-p</code>: Hiển thị một lời nhắc xác nhận với hành động sắp thực hiện, cho phép bạn xác nhận từng lệnh.</li><li><code>-n &lt;số&gt;</code>: Cho phép <code>xargs</code> thực hiện từng lần lặp một. Ví dụ, <code>-n1</code> để xác nhận riêng từng lệnh khi kết hợp với <code>-p</code>.</li><li><code>-I %</code>: Sử dụng đầu ra vào một biến giữ chỗ (placeholder), cho phép bạn thực hiện nhiều điều khác nhau, bao gồm chạy nhiều lệnh. Ký hiệu <code>%</code> có thể được thay thế bằng bất kỳ ký hiệu nào khác.</li><pre><code>lệnh1 | xargs -I % /bin/bash -c 'lệnh2 %; lệnh3 %'</code></pre></ul></ul>"
+  },
+  {
+    "id": "vim",
+    "title": "vim",
+    "content": "<p><code>vim</code> là một trình soạn thảo tệp rất phổ biến trong giới lập trình viên, được phát triển tích cực và có một cộng đồng lớn. <code>vi</code> trong các hệ thống hiện đại chỉ là một alias của <code>vim</code>, viết tắt của \"vi improved\" (vi cải tiến).</p><p><b>Cách sử dụng cơ bản:</b></p><ul><li>Khởi động trình soạn thảo:</li><pre><code>vi</code></pre><li>Chỉnh sửa một tệp cụ thể khi khởi động:</li><pre><code>vi test.txt</code></pre></ul><p><b>Các chế độ chính của Vim:</b></p><ul><li><b>Chế độ lệnh (Command/Normal mode):</b> Đây là chế độ mặc định khi bạn mở trình soạn thảo. Trong chế độ này, bạn không thể nhập văn bản như các trình soạn thảo GUI thông thường. Thay vào đó, bạn sử dụng các phím để điều hướng và thực hiện các lệnh.</li><li><b>Chế độ chèn (Insert mode):</b> Để nhập văn bản, bạn cần vào chế độ chèn bằng cách nhấn phím <code>i</code>. Khi ở chế độ này, bạn sẽ thấy từ <code>--INSERT --</code> xuất hiện ở cuối trình soạn thảo.</li></ul><p><b>Thao tác cơ bản:</b></p><ul><li>Thoát chế độ chèn: Nhấn phím <code>esc</code> để quay lại chế độ lệnh.</li><li>Di chuyển: Sử dụng các phím mũi tên hoặc các phím <code>h</code> (trái), <code>j</code> (xuống), <code>k</code> (lên), <code>l</code> (phải).</li><li>Lưu tệp: Trong chế độ lệnh, nhấn <code>:</code> (dấu hai chấm) rồi <code>w</code>.</li><li>Lưu và thoát: Trong chế độ lệnh, nhấn <code>:</code> rồi <code>wq</code>.</li><li>Thoát mà không lưu: Trong chế độ lệnh, nhấn <code>:</code> rồi <code>q!</code> (buộc thoát).</li><li>Hoàn tác (undo): Trong chế độ lệnh, nhấn <code>u</code>.</li><li>Làm lại (redo): Trong chế độ lệnh, nhấn <code>Ctrl-r</code>.</li><li>Xóa ký tự: Nhấn phím <code>x</code> để xóa ký tự đang được đánh dấu.</li><li>Di chuyển con trỏ: Nhấn <code>A</code> để đến cuối dòng hiện tại; nhấn <code>0</code> để đến đầu dòng.</li><li>Xóa từ: Di chuyển con trỏ đến ký tự đầu tiên của một từ và nhấn <code>d</code> theo sau là <code>w</code> để xóa từ đó. Nếu bạn nhấn <code>e</code> thay vì <code>w</code>, khoảng trắng trước từ tiếp theo sẽ được giữ lại.</li><li>Xóa nhiều từ: Sử dụng một số giữa <code>d</code> và <code>w</code>, ví dụ <code>d3w</code> để xóa 3 từ về phía trước.</li><li>Xóa dòng: Nhấn <code>dd</code> để xóa toàn bộ dòng. Nhấn <code>d</code> theo sau là <code>$</code> để xóa từ vị trí con trỏ đến cuối dòng.</li></ul><p>Để tìm hiểu thêm về Vim, bạn có thể tham khảo Vim FAQ và đặc biệt là chạy lệnh <code>vimtutor</code> (nên đã được cài đặt trong hệ thống của bạn), công cụ này sẽ giúp bạn rất nhiều trong việc bắt đầu khám phá <code>vim</code>.</p>"
+  },
+  {
+    "id": "emacs",
+    "title": "emacs",
+    "content": "<p><code>emacs</code> là một trình soạn thảo mạnh mẽ, được coi là trình soạn thảo tiêu biểu cho các hệ thống UNIX. Một số người còn sử dụng nó như một loại hệ điều hành riêng.</p><p><b>Cách sử dụng cơ bản:</b></p><ul><li>Mở một phiên Emacs mới:</li><pre><code>emacs</code></pre><li>Chỉnh sửa một tệp hiện có:</li><pre><code>emacs &lt;tên_tệp&gt;</code></pre></ul><p><b>Lưu tệp:</b></p><p>Sau khi chỉnh sửa xong, nhấn <code>Ctrl-x</code> theo sau là <code>Ctrl-w</code>. Emacs sẽ yêu cầu bạn xác nhận thư mục và hỏi liệu có ghi đè tệp nếu nó đã tồn tại. Trả lời <code>y</code> để xác nhận.</p><p><b>Thoát Emacs:</b></p><p>Nhấn <code>Ctrl-x</code> theo sau là <code>Ctrl-c</code>, hoặc <code>Ctrl-x</code> theo sau là <code>c</code> (giữ phím <code>Ctrl</code>).</p><p><b>Lưu ý dành cho người dùng macOS:</b> Phiên bản Emacs tích hợp sẵn trên macOS có thể đã lỗi thời do vấn đề GPLv3. Nên cài đặt phiên bản mới hơn thông qua Homebrew (<code>brew install emacs</code>).</p><p><b>Để tìm hiểu thêm:</b> Bạn có thể mở Emacs và nhấn <code>Ctrl-h r</code> để mở hướng dẫn tích hợp sẵn, và <code>Ctrl-h t</code> để mở hướng dẫn chính thức.</p>"
+  },
+  {
+    "id": "nano",
+    "title": "nano",
+    "content": "<p><code>nano</code> là một trình soạn thảo thân thiện với người mới bắt đầu.</p><p><b>Cách sử dụng:</b></p><pre><code>nano &lt;tên_tệp&gt;</code></pre><p>Bạn có thể trực tiếp nhập ký tự vào tệp mà không cần lo lắng về các chế độ (như Vim).</p><p><b>Thao tác cơ bản:</b></p><ul><li>Thoát: Nhấn <code>Ctrl-X</code>. Nếu bạn đã chỉnh sửa tệp, trình soạn thảo sẽ hỏi xác nhận để lưu hoặc hủy các chỉnh sửa.</li><li>Trợ giúp: Phần trợ giúp ở dưới cùng màn hình hiển thị các lệnh bàn phím để làm việc với tệp.</li></ul><p><code>nano</code> về cơ bản giống như <code>pico</code>, nhưng <code>nano</code> là phiên bản GNU của <code>pico</code> được tạo ra để đáp ứng các yêu cầu giấy phép của hệ điều hành GNU khi <code>pico</code> không phải là mã nguồn mở.</p>"
+  },
+  {
+    "id": "whoami",
+    "title": "whoami",
+    "content": "<p>Lệnh <code>whoami</code> được sử dụng để in ra tên người dùng hiện đang đăng nhập vào phiên terminal.</p><p><b>Cách sử dụng:</b></p><pre><code>whoami</code></pre><p>Lưu ý: Lệnh này khác với lệnh <code>who am i</code>, vốn in ra nhiều thông tin hơn về phiên terminal hiện tại.</p>"
+  },
+  {
+    "id": "who",
+    "title": "who",
+    "content": "<p>Lệnh <code>who</code> hiển thị danh sách người dùng hiện đang đăng nhập vào hệ thống.</p><p><b>Cách sử dụng:</b></p><ul><li>Liệt kê các người dùng đang đăng nhập:</li><pre><code>who</code></pre><p>Bạn có thể thấy tên terminal được sử dụng và thời gian/ngày phiên được bắt đầu. Nếu bạn là người dùng duy nhất, có thể có nhiều mục nhập vì mỗi shell được mở sẽ được tính là một lượt truy cập.</p><li>Hiển thị thêm thông tin chi tiết:</li><pre><code>who -aH</code></pre><p>Tùy chọn <code>-aH</code> sẽ yêu cầu <code>who</code> hiển thị nhiều thông tin hơn, bao gồm thời gian nhàn rỗi và ID tiến trình của terminal.</p><li>Lệnh đặc biệt <code>who am i</code> sẽ liệt kê chi tiết về phiên terminal hiện tại của bạn:</li><pre><code>who am i</code></pre></ul>"
+  },
+  {
+    "id": "su",
+    "title": "su",
+    "content": "<p>Lệnh <code>su</code> (substitute user) được sử dụng để chuyển đổi sang một người dùng khác trong terminal.</p><p><b>Cách sử dụng:</b></p><ul><li>Chuyển sang một người dùng cụ thể:</li><pre><code>su &lt;tên_người_dùng&gt;</code></pre><li>Ví dụ:</li><pre><code>su flavio</code></pre><li>Nếu bạn đang đăng nhập với tư cách người dùng thông thường và chạy <code>su</code> mà không có đối số nào, nó sẽ mặc định chuyển sang người dùng <code>root</code> và yêu cầu bạn nhập mật khẩu của người dùng <code>root</code>.</li></ul><p>Lệnh <code>su</code> sẽ khởi động một shell mới dưới quyền của người dùng khác. Khi bạn hoàn thành, gõ <code>exit</code> trong shell đó sẽ đóng shell và quay trở lại shell của người dùng hiện tại.</p>"
+  },
+  {
+    "id": "sudo",
+    "title": "sudo",
+    "content": "<p>Lệnh <code>sudo</code> (superuser do) thường được sử dụng để chạy một lệnh với quyền của người dùng <code>root</code> hoặc một người dùng khác. Để sử dụng <code>sudo</code>, bạn phải được cấp quyền sử dụng nó. Khi thực hiện, bạn sẽ cần nhập mật khẩu của <b>người dùng hiện tại</b> của mình (không phải mật khẩu của người dùng <code>root</code>).</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Chạy một lệnh với quyền <code>root</code>:</li><pre><code>sudo &lt;lệnh&gt;</code></pre><li>Ví dụ, để chỉnh sửa tệp cấu hình hệ thống mà bình thường bạn không có quyền ghi:</li><pre><code>sudo nano /etc/hosts</code></pre><li>Khởi động một shell với quyền <code>root</code>:</li><pre><code>sudo -i</code></pre><li>Chạy lệnh với quyền của một người dùng cụ thể (mặc định là <code>root</code>, nhưng có thể chỉ định bằng <code>-u</code>):</li><pre><code>sudo -u &lt;tên_người_dùng&gt; &lt;lệnh&gt;</code></pre><li>Ví dụ:</li><pre><code>sudo -u flavio ls /Users/flavio</code></pre></ul><p>Các quyền <code>sudo</code> có thể được cấu hình rất linh hoạt, đặc biệt hữu ích trong môi trường máy chủ đa người dùng.</p>"
+  },
+  {
+    "id": "passwd",
+    "title": "passwd",
+    "content": "<p>Lệnh <code>passwd</code> được sử dụng để thay đổi mật khẩu của người dùng trong Linux.</p><p><b>Có hai trường hợp sử dụng chính:</b></p><ul><li><b>Thay đổi mật khẩu của chính bạn:</b></li><pre><code>passwd</code></pre><p>Lệnh sẽ yêu cầu bạn nhập mật khẩu cũ, sau đó là mật khẩu mới và xác nhận mật khẩu mới.</p><li><b>Thay đổi mật khẩu của người dùng khác (chỉ khi bạn là <code>root</code> hoặc có đặc quyền siêu người dùng):</b></li><pre><code>passwd &lt;tên_người_dùng&gt; &lt;mật_khẩu_mới&gt;</code></pre><p>Trong trường hợp này, bạn không cần phải nhập mật khẩu cũ của người dùng đó.</p></ul>"
+  },
+  {
+    "id": "ping",
+    "title": "ping",
+    "content": "<p>Lệnh <code>ping</code> được sử dụng để kiểm tra một máy chủ mạng (host) cụ thể, có thể là trên mạng cục bộ hoặc trên Internet. Nó giúp xác định máy chủ có thể truy cập được hay không và đánh giá hiệu suất mạng. <code>ping</code> hoạt động bằng cách sử dụng giao thức ICMP (Internet Control Message Protocol).</p><p><b>Cách sử dụng:</b></p><pre><code>ping &lt;host&gt;</code></pre><p>Trong đó <code>&lt;host&gt;</code> có thể là tên miền hoặc địa chỉ IP. Lệnh sẽ gửi yêu cầu đến máy chủ và máy chủ trả về phản hồi. Mặc định, <code>ping</code> sẽ tiếp tục gửi yêu cầu mỗi giây cho đến khi bạn dừng nó bằng <code>Ctrl-C</code>.</p><p><b>Tùy chọn:</b></p><ul><li><code>-c &lt;số_lần&gt;</code>: Chỉ định số lần bạn muốn thử ping:</li><pre><code>ping -c 2 google.com</code></pre></ul><p><b>Kết quả:</b></p><p>Sau khi dừng <code>ping</code>, nó sẽ in ra một số thống kê về kết quả, bao gồm tỷ lệ gói tin bị mất và thống kê về hiệu suất mạng. Màn hình cũng hiển thị địa chỉ IP của máy chủ và thời gian để nhận được phản hồi.</p><p>Lưu ý: Không phải tất cả các máy chủ đều hỗ trợ ping (có thể bị chặn bởi tường lửa hoặc cố ý để giảm tải/ẩn máy chủ). Việc ping một máy chủ hữu ích để biết máy chủ có thể truy cập được hay không và khoảng cách địa lý (thời gian phản hồi càng ít, máy chủ càng gần).</p>"
+  },
+  {
+    "id": "traceroute",
+    "title": "traceroute",
+    "content": "<p>Lệnh <code>traceroute</code> giúp bạn biết các bước (các router) mà gói tin của bạn đi qua để đến được một máy chủ trên Internet.</p><p><b>Cách sử dụng:</b></p><pre><code>traceroute &lt;host&gt;</code></pre><p>Lệnh này sẽ từ từ thu thập tất cả thông tin trong khi gói tin di chuyển.</p><p><b>Kết quả:</b></p><p>Không phải mọi router trên đường đi đều trả về thông tin; trong trường hợp đó, <code>traceroute</code> sẽ in ra <code>* * *</code>. Nếu có thông tin, bạn sẽ thấy tên máy chủ, địa chỉ IP và một chỉ số hiệu suất cho mỗi chặng.</p><p><code>traceroute</code> mặc định cố gắng 3 lần để lấy chỉ số thời gian cho mỗi router, đó là lý do tại sao nó mất nhiều thời gian hơn so với <code>ping</code>.</p><p><b>Tùy chọn:</b></p><ul><li><code>-q &lt;số&gt;</code>: Tùy chỉnh số lần truy vấn cho mỗi chặng:</li><pre><code>traceroute -q 1 flaviocopes.com</code></pre></ul>"
+  },
+  {
+    "id": "clear",
+    "title": "clear",
+    "content": "<p>Lệnh <code>clear</code> được sử dụng để xóa tất cả các lệnh và đầu ra trước đó trên màn hình terminal hiện tại. Màn hình sẽ được xóa và bạn chỉ thấy dấu nhắc lệnh ở trên cùng.</p><p><b>Cách sử dụng:</b></p><pre><code>clear</code></pre><p><b>Phím tắt tiện lợi:</b> <code>Ctrl-L</code>.</p><p><b>Lưu ý:</b> Khi sử dụng <code>clear</code> thông thường, bạn sẽ mất khả năng cuộn lên để xem lại đầu ra của các lệnh trước đó. Để tránh điều này, bạn có thể sử dụng tùy chọn <code>-x</code>:</p><pre><code>clear -x</code></pre><p>Lệnh này vẫn xóa màn hình nhưng cho phép bạn cuộn lên để xem lại các công việc trước đó.</p>"
+  },
+  {
+    "id": "history",
+    "title": "history",
+    "content": "<p>Mỗi khi bạn chạy một lệnh, lệnh đó sẽ được ghi nhớ trong lịch sử của shell.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Hiển thị toàn bộ lịch sử các lệnh đã chạy, kèm theo số thứ tự:</li><pre><code>history</code></pre><li>Lặp lại một lệnh đã lưu trong lịch sử: Sử dụng cú pháp <code>!&lt;số_lệnh&gt;</code>. Ví dụ, <code>!121</code> sẽ lặp lại lệnh có số thứ tự 121.</li><li>Kết hợp với <code>grep</code> để tìm một lệnh đã chạy trong lịch sử:</li><pre><code>history | grep docker</code></pre><li>Xóa lịch sử lệnh:</li><pre><code>history -c</code></pre></ul><p>Thông thường, 500 lệnh cuối cùng sẽ được lưu trữ trong lịch sử.</p>"
+  },
+  {
+    "id": "export",
+    "title": "export",
+    "content": "<p>Lệnh <code>export</code> được sử dụng để xuất các biến môi trường (environment variables) tới các tiến trình con (child processes).</p><p><b>Tại sao cần <code>export</code>?</b></p><p>Khi bạn định nghĩa một biến (ví dụ: <code>TEST=\"test\"</code>) trong Bash, biến đó chỉ cục bộ trong shell hiện tại. Nếu bạn chạy một script hoặc lệnh khác, một subshell (shell con) sẽ được khởi chạy để thực thi nó, và subshell này sẽ không chứa các biến cục bộ của shell hiện tại. Do đó, lệnh <code>echo $TEST</code> trong script sẽ không in ra gì.</p><p>Để biến có thể truy cập được trong các tiến trình con, bạn cần định nghĩa nó bằng <code>export</code>:</p><pre><code>export TEST=\"test\"</code></pre><p>Sau khi export, chạy script sẽ in ra \"test\".</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Thêm giá trị vào một biến hiện có (thường dùng với biến <code>PATH</code>):</li><pre><code>export PATH=$PATH:/new/path</code></pre><li>Thường được sử dụng khi tạo biến mới trong các tệp cấu hình shell như <code>.bash_profile</code> hoặc <code>.bashrc</code> với Bash, hoặc <code>.zshenv</code> với Zsh.</li><li>Xóa một biến đã được export:</li><pre><code>export -n TEST</code></pre><li>Liệt kê tất cả các biến đã được export:</li><pre><code>export</code></pre></ul>"
+  },
+  {
+    "id": "crontab",
+    "title": "crontab",
+    "content": "<p>Lệnh <code>crontab</code> là điểm khởi đầu để làm việc với các cron job, tức là các công việc được lên lịch để chạy theo các khoảng thời gian cụ thể (ví dụ: mỗi giờ, mỗi ngày, mỗi tuần). Chúng rất mạnh mẽ, đặc biệt trên các máy chủ để thực hiện bảo trì và tự động hóa.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li><b>Liệt kê các cron job hiện có:</b></li><pre><code>crontab -l</code></pre><p>Bạn có thể không có bất kỳ cron job nào được định nghĩa.</p><li><b>Chỉnh sửa hoặc thêm cron job mới:</b></li><pre><code>crontab -e</code></pre><p>Mặc định, lệnh này sẽ mở tệp cron job bằng trình soạn thảo mặc định (thường là <code>vim</code>).</p><p>Nếu bạn muốn sử dụng một trình soạn thảo khác (ví dụ: <code>nano</code>):</p><pre><code>EDITOR=nano crontab -e</code></pre><li><b>Cú pháp định nghĩa cron job:</b><p>Cú pháp định nghĩa cron job khá phức tạp. Bạn thường sẽ thêm một dòng cho mỗi cron job. Có nhiều trang web hỗ trợ tạo cú pháp cron, ví dụ: crontab-generator.org.</p></li><li><b>Ví dụ về một dòng cron job:</b></li><pre><code>* */12 * * * /Users/flavio/test.sh &gt;/dev/null 2&gt;&amp;1</code></pre><p>Dòng này sẽ chạy script <code>/Users/flavio/test.sh</code> cứ sau 12 giờ.</p><li><b>Lưu và thoát:</b> Sau khi thêm dòng cron job, nhấn <code>Ctrl-X</code> và sau đó nhấn <code>y</code> để lưu.</li><li><b>Xóa một cron job:</b> Chạy <code>crontab -e</code> một lần nữa, xóa dòng cron job cần xóa, sau đó thoát trình soạn thảo và lưu tệp.</li></ul>"
+  },
+  {
+    "id": "uname",
+    "title": "uname",
+    "content": "<p>Lệnh <code>uname</code> được sử dụng để trả về tên mã hệ điều hành và các thông tin hệ thống khác.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li>Trả về tên mã hệ điều hành (ví dụ: <code>Darwin</code> trên macOS):</li><pre><code>uname</code></pre><li><b>Các tùy chọn phổ biến:</b></li><ul><li><code>-m</code>: Hiển thị tên phần cứng (ví dụ: <code>x86_64</code>).</li><li><code>-p</code>: In tên kiến trúc bộ xử lý (ví dụ: <code>i386</code>).</li><li><code>-s</code>: In tên hệ điều hành.</li><li><code>-r</code>: In phiên bản phát hành của hệ điều hành.</li><li><code>-v</code>: In phiên bản của hệ điều hành.</li><li><code>-n</code>: In tên mạng của node.</li><li><b><code>-a</code>: In tất cả thông tin có sẵn:</b></li><pre><code>uname -a</code></pre></ul></ul><p><b>Lưu ý:</b> Trên macOS, bạn cũng có thể sử dụng lệnh <code>sw_vers</code> để in thêm thông tin về hệ điều hành macOS, khác với phiên bản Darwin (kernel). Linux là kernel, trong khi GNU/Linux là tên của hệ điều hành đầy đủ.</p>"
+  },
+  {
+    "id": "env",
+    "title": "env",
+    "content": "<p>Lệnh <code>env</code> có thể được sử dụng để truyền các biến môi trường tới các tiến trình mà không cần đặt chúng trong môi trường shell hiện tại. Ngoài ra, nếu chạy mà không có tùy chọn, nó sẽ liệt kê tất cả các biến môi trường đã được thiết lập.</p><p><b>Cách sử dụng và các tùy chọn:</b></p><ul><li><b>Truyền biến môi trường tới một lệnh:</b></li><pre><code>env USER=flavio node app.js</code></pre><p>Trong ví dụ này, biến môi trường <code>USER</code> sẽ có thể truy cập được từ ứng dụng Node.js.</p><li><b>Chạy lệnh với môi trường hoàn toàn trống (xóa tất cả các biến môi trường đã có):</b> Sử dụng tùy chọn <code>-i</code>.</li><pre><code>env -i node app.js</code></pre><p>Lưu ý: Điều này có thể gây lỗi nếu lệnh không được chỉ định bằng đường dẫn đầy đủ, vì biến <code>PATH</code> (dùng để tìm lệnh) sẽ bị hủy đặt. Bạn cần cung cấp đường dẫn đầy đủ cho lệnh:</p><pre><code>env -i /usr/local/bin/node app.js</code></pre><li><b>Làm cho một biến không thể truy cập được bên trong chương trình bạn chạy:</b> Sử dụng tùy chọn <code>-u</code>.</li><pre><code>env -u HOME node app.js</code></pre><li><b>Liệt kê tất cả các biến môi trường:</b></li><pre><code>env</code></pre><p>Lệnh này sẽ hiển thị danh sách tất cả các biến môi trường đã được thiết lập.</p></ul>"
+  },
+  {
+    "id": "printenv",
+    "title": "printenv",
+    "content": "<p>Lệnh <code>printenv</code> được sử dụng để in ra các giá trị của các biến môi trường.</p><p><b>Cách sử dụng:</b></p><ul><li><b>In tất cả các biến môi trường:</b></li><pre><code>printenv</code></pre><p>Lệnh này sẽ hiển thị một danh sách tất cả các biến môi trường đã được thiết lập trong shell của bạn.</p><li><b>Chỉ hiển thị giá trị của một biến cụ thể:</b></li><pre><code>printenv PATH</code></pre><p>Bạn chỉ cần thêm tên biến làm tham số.</p></ul>"
+  }
+        ];
+
+        const toc = document.getElementById('toc');
+        const content = document.getElementById('command-content');
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.getElementById('menu-toggle');
+
+        commands.forEach(cmd => {
+            // Create TOC link
+            const link = document.createElement('a');
+            link.href = `#${cmd.id}`;
+            link.textContent = cmd.title;
+            link.className = 'block py-2 px-3 rounded-md hover:bg-gray-700';
+            link.onclick = () => {
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('hidden');
+                }
+            };
+            toc.appendChild(link);
+
+            // Create content card
+            const card = document.createElement('div');
+            card.id = cmd.id;
+            card.className = 'command-card p-6 rounded-lg shadow-lg';
+            card.innerHTML = `<h2 class="text-2xl font-bold mb-4 pb-2">${cmd.title}</h2>${cmd.content}`;
+            content.appendChild(card);
+        });
+
+        // Toggle sidebar on mobile
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+        
+        // Active link highlighting on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const tocLink = document.querySelector(`#toc a[href="#${id}"]`);
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('#toc a').forEach(link => link.classList.remove('active'));
+                    tocLink.classList.add('active');
+                }
+            });
+        }, { rootMargin: "-30% 0px -70% 0px" });
+
+        document.querySelectorAll('.command-card').forEach(section => {
+            observer.observe(section);
+        });
+
+    </script>
+</body>
+</html>
+
